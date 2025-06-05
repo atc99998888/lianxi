@@ -1,6 +1,80 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>加载中</title>
+    <meta charset="UTF-8">
+    <title>微信/QQ批量拦截监测工具</title>
+    <style>
+      body { font-family: '微软雅黑', sans-serif; margin: 40px; }
+      textarea { width: 400px; height: 200px; font-size: 16px; }
+      table { border-collapse: collapse; margin-top: 20px;}
+      td, th { border: 1px solid #ccc; padding: 6px 12px;}
+      .checking { color: #888; }
+      .ok { color: green; }
+      .bad { color: red; }
+    </style>
+</head>
+<body>
+    <h2>微信/QQ批量拦截检测</h2>
+    <textarea id="urls" placeholder="一行一个网址，必须带http://或https://"></textarea><br>
+    <button onclick="start()" id="startBtn">开始批量检测</button>
+    <table id="resultTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>网址</th>
+          <th>微信</th>
+          <th>QQ</th>
+        </tr>
+      </thead>
+      <tbody id="resultBody"></tbody>
+    </table>
+    <script>
+      async function check(url) {
+        try {
+          const r = await fetch('https://cdn-assets.safe-data-access.xyz/api/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+          });
+          if (!r.ok) return {weixin: "接口异常", qq: "接口异常"};
+          return await r.json();
+        } catch {
+          return {weixin: "接口失败", qq: "接口失败"};
+        }
+      }
+
+      async function start() {
+        const urls = document.getElementById('urls').value
+          .split('\n')
+          .map(x=>x.trim())
+          .filter(Boolean);
+        if (urls.length === 0) {
+          alert('请输入要检测的网址');
+          return;
+        }
+        document.getElementById('startBtn').disabled = true;
+        const tbody = document.getElementById('resultBody');
+        tbody.innerHTML = '';
+        document.getElementById('resultTable').style.display = '';
+        // 初始化结果表
+        for (const url of urls) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${url}</td><td class="checking">检测中...</td><td class="checking">检测中...</td>`;
+          tbody.appendChild(tr);
+        }
+        // 顺序异步检测（可并发，建议不要太快防止IP被拉黑）
+        for (let i=0; i<urls.length; ++i) {
+          const url = urls[i];
+          const result = await check(url);
+          const tr = tbody.children[i];
+          tr.children[1].textContent = result.weixin;
+          tr.children[1].className = result.weixin.includes('未拦截') ? 'ok' : 'bad';
+          tr.children[2].textContent = result.qq;
+          tr.children[2].className = result.qq.includes('未拦截') ? 'ok' : 'bad';
+          // 防止接口被封，建议间隔一会再检测下一个
+          await new Promise(r=>setTimeout(r, 900));
+        }
+        document.getElementById('startBtn').disabled = false;
+      }
+    </script>
+</body>
+</html>
