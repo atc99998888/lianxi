@@ -29,7 +29,6 @@
       overflow: hidden;
       z-index: 10;
       animation: breath-glow 2.2s ease-in-out infinite alternate;
-      border: 2px solid transparent;
     }
     @keyframes breath-glow {
       0% { box-shadow: 0 0 14px 3px #ee6cffbb;}
@@ -39,12 +38,6 @@
       width:100%;overflow:hidden;height:100%;display:flex;align-items:center;position:relative;
       padding-left:1.2vw;padding-right:1vw;
       user-select:none;
-    }
-    .marquee-inner{
-      display: flex;align-items:center;
-      white-space:nowrap;
-      will-change: transform;
-      height:100%;
     }
     .marquee-content{
       font-size: 1.27rem;
@@ -56,8 +49,11 @@
       background-clip: text;
       text-fill-color: transparent;
       text-shadow: 0 2px 10px #c040ff33, 0 1px 0 #fff6;
-      margin-right: 2.5vw;
+      white-space: nowrap;
       display: inline-block;
+      position:relative;
+      left:0;
+      transition: none;
     }
     .adv-addr {
       font-weight: bold;
@@ -182,23 +178,13 @@
   <!-- 顶部动态广告 -->
   <div class="adv-bar">
     <div class="marquee">
-      <div class="marquee-inner" id="marqueeInner">
-        <span class="marquee-content">
-          <span style="color:#3df5e5;">永久地址</span>
-          <span style="color:#ad28e4;">　</span>
-          <span class="adv-l">【</span>
-          <span class="adv-addr">y2412.cc</span>
-          <span class="adv-r">】</span>
-        </span>
-        <!-- 副本用于无缝衔接 -->
-        <span class="marquee-content">
-          <span style="color:#3df5e5;">永久地址</span>
-          <span style="color:#ad28e4;">　</span>
-          <span class="adv-l">【</span>
-          <span class="adv-addr">y2412.cc</span>
-          <span class="adv-r">】</span>
-        </span>
-      </div>
+      <span class="marquee-content" id="marqueeText">
+        <span style="color:#3df5e5;">永久地址</span>
+        <span style="color:#ad28e4;">　</span>
+        <span class="adv-l">【</span>
+        <span class="adv-addr">y2412.cc</span>
+        <span class="adv-r">】</span>
+      </span>
     </div>
   </div>
   <!-- 主内容：标题和菜单 -->
@@ -215,7 +201,7 @@
   <!-- 英文备案 -->
   <div class="footer-en">
     © 2025 FutureTech Ltd. All rights reserved. | Company: FutureTech Solutions Inc.<br>
-    Email: support@futuretech.com | Tel: +1-888-123-4567 | Address: 123 Silicon Valley Rd, San Jose, CA, USA
+    Email: support@futuretech.com | Address: 123 Silicon Valley Rd, San Jose, CA, USA
   </div>
   <!-- 弹窗提示 -->
   <div id="modal" style="display:none"></div>
@@ -271,25 +257,30 @@
     }
     loop();
 
-    // 无缝跑马灯
+    // 单次循环丝滑跑马灯
     (function(){
-      const marquee = document.getElementById('marqueeInner');
-      let offset = 0, speed = 1, textW = 0, step = ()=>{};
-      function calcWidth() {
-        // 两个内容块宽度
-        textW = marquee.children[0].offsetWidth;
+      const text = document.getElementById('marqueeText');
+      const parent = text.parentNode;
+      let parentW = 0, textW = 0, pos = 0, speed = 1.1, raf = null;
+      function calcSize() {
+        parentW = parent.offsetWidth;
+        textW = text.offsetWidth;
+        pos = parentW;
+        text.style.left = pos + "px";
       }
-      function animateMarquee() {
-        offset -= speed;
-        if(-offset >= textW) offset = 0;
-        marquee.style.transform = `translateX(${offset}px)`;
-        requestAnimationFrame(animateMarquee);
+      function scrollLoop(){
+        pos -= speed;
+        if(pos < -textW){
+          pos = parentW;
+        }
+        text.style.left = pos + "px";
+        raf = requestAnimationFrame(scrollLoop);
       }
       setTimeout(()=>{
-        calcWidth();
-        animateMarquee();
+        calcSize();
+        scrollLoop();
       },300);
-      window.addEventListener('resize',()=>setTimeout(calcWidth,300));
+      window.addEventListener('resize',()=>{setTimeout(calcSize,200)});
     })();
 
     // base64解码并跳转+弹窗
