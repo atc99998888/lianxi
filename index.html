@@ -1,89 +1,108 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Loading...</title>
-<style>
-/* ───────── 全局背景 ───────── */
-html,body{
-  margin:0;padding:0;height:100%;width:100%;
-  background:#001509;
-  background:radial-gradient(ellipse at center,
-    #003915 0%, #001d0b 55%, #000 100%);
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;font-family:"Segoe UI","Microsoft YaHei",sans-serif;
-}
-
-/* ───────── 中央按钮容器 ───────── */
-.pulse-wrap{position:relative;width:220px;height:220px;cursor:pointer;}
-.pulse-ring{
-  position:absolute;left:0;top:0;width:100%;height:100%;
-  border:4px solid #21ff69;border-radius:50%;opacity:.9;
-  animation:pulse 2s linear infinite;
-}
-.pulse-ring:nth-child(2){animation-delay:.4s}
-.pulse-ring:nth-child(3){animation-delay:.8s}
-.pulse-ring:nth-child(4){animation-delay:1.2s}
-@keyframes pulse{
-  0%{transform:scale(.3);opacity:.9}
-  70%{transform:scale(1.5);opacity:0}
-  100%{opacity:0}
-}
-
-/* ───────── 主体 ───────── */
-.pulse-btn{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:170px;height:170px;border-radius:50%;
-  background:linear-gradient(135deg,#05e36c 0%,#028b37 100%);
-  box-shadow:0 0 24px #1aff7b80,0 0 28px #18ff7a33 inset;
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .25s;
-}
-.pulse-btn:hover{transform:translate(-50%,-50%) scale(1.08);}
-.pulse-btn:active{transform:translate(-50%,-50%) scale(.92);}
-
-/* ───────── 文字 ───────── */
-.pulse-btn span{
-  color:#fff;font-size:24px;font-weight:700;
-  letter-spacing:.1em;
-  animation:textMove 3s ease-in-out infinite;
-  text-shadow:0 0 6px #21ff69,0 0 10px #21ff69aa;
-}
-@keyframes textMove{
-  0%,100%{transform:translateY(-3px)}
-  50%{transform:translateY(3px)}
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Contact Us - Greenfield University</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {margin:0;padding:0;background:#f7fafc;}
+    body {font-family:'Segoe UI',Arial,sans-serif;color:#233554;}
+    .container {
+      max-width: 430px;
+      margin: 46px auto 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 36px #81c17b16;
+      padding: 34px 28px 26px 28px;
+      text-align: center;
+      border: 1.5px solid #e0e4f0;
+    }
+    .logo {
+      width: 78px;
+      height: 78px;
+      margin-bottom: 18px;
+      border-radius: 16px;
+      background: #e8f5e9;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.3em;
+      color: #388e3c;
+      user-select: none;
+    }
+    h1 {
+      margin: 0 0 14px 0;
+      font-size: 2.0em;
+      color: #235085;
+      letter-spacing: .01em;
+      font-weight: 700;
+    }
+    .desc {
+      color: #476d6b;
+      font-size: 1.08em;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    .contact-list {
+      text-align: left;
+      margin: 0 auto 26px auto;
+      max-width: 340px;
+      font-size: 1.07em;
+    }
+    .contact-list li {
+      list-style: none;
+      margin: 0 0 15px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .contact-list strong {
+      display: inline-block;
+      width: 74px;
+      color: #235085;
+      font-weight: 600;
+    }
+    .contact-list a {
+      color: #197041;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .contact-list a:hover {
+      text-decoration: underline;
+    }
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.99em;
+      margin-top: 32px;
+      user-select: none;
+      letter-spacing: .01em;
+      line-height: 1.7;
+      border-top: 1px solid #e0e4f0;
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <div class="logo">🎓</div>
+    <h1>Contact Us</h1>
+    <div class="desc">
+      诚招全国推广员，佣金高达％70至％90
+    </div>
+    <ul class="contact-list">
+      <li><strong>联系客服:</strong> → 海鸥号🆔7589975</li>
+如果没有★海鸥★点这里↓↓↓
+      <li><strong>海鸥官网:</strong> <a href="http://www.haioumx.com"> http://www.haioumx.com </a></li>
 
-<!-- 按钮 -->
-<div class="pulse-wrap" id="goBtn">
-  <div class="pulse-ring"></div>
-  <div class="pulse-ring"></div>
-  <div class="pulse-ring"></div>
-  <div class="pulse-ring"></div>
-  <div class="pulse-btn"><span>点击进入</span></div>
-</div>
-
-<script>
-/* ——— 把下行替换成你的——— */
-const b64Str = "aHR0cHM6Ly93d3cuZXhhbXBsZS5jb20=";
-
-/* ——— 留——— */
-document.getElementById('goBtn').addEventListener('click',()=>{
-  try{
-    const url = atob(b64Str.trim());
-    if(/^https?:\/\//i.test(url)){
-      location.href = url;
-    }else{
-      alert("Base64 无效或非 http(s) 链接");
-    }
-  }catch(e){
-    alert("Base64 解析错误！");
-  }
-});
-</script>
+    </ul>
+    <div class="footer">
+      <strong>Greenfield University</strong><br>
+      100 College Ave, New York, NY, USA<br>
+      | Email: info@greenfield.edu<br>
+      School Registration No.: NY-EDU-2025-00123<br>
+      &copy; 2025 Greenfield University. All rights reserved.
+    </div>
+  </div>
 </body>
 </html>
